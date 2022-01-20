@@ -1,0 +1,5 @@
+.profile__avatar-wrapper {
+    max-width: 120px;
+    width: 100%;
+    display: flex;
+}

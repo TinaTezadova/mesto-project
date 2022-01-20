@@ -1,0 +1,17 @@
+.card-item__button {
+    max-width: 22px;
+    width: 100%;
+    height: 19px;
+    background-image: url('../../../images/union.svg');
+    background-size: 22px 19px;
+    background-repeat: no-repeat;
+    background-color: rgba(0,0,0,0);
+    background-position: center;
+    border: none;
+    margin: auto 0 auto auto;
+    cursor: pointer;
+}
+
+.card-item__button:hover {
+    opacity: 0.5;
+}

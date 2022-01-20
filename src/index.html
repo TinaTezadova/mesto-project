@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./pages/index.css">
+    <title>Mesto</title>
+</head>
+
+<body class="root">
+    <div class="main-page">
+        <header class="header">
+            <div class="header__img"></div>
+        </header>
+
+        <main class="content">
+            <section class="profile">
+                <div class="profile__avatar-wrapper">
+                    <img class="profile__avatar" src='https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg'
+                        alt="Аватарка пользователя">
+                </div>
+
+                <div class="profile__info-wrapper">
+                    <div class="profile__name-wrapper">
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <button class="profile__button profile__button_type_edit-profile" type="button"
+                            label="Редактировать профиль"></button>
+                    </div>
+
+                    <h2 class="profile__field-of-activity">Исследователь океана</h2>
+                </div>
+                <button class="profile__button profile__button_type_add" type="button"
+                    label="Добавить фотографию в профиль"></button>
+            </section>
+
+            <section class="cards-container">
+                <div class="card-item">
+                    <div class="card-item__image-container">
+                        <img src="images/Карачаевск.jpg" alt="Карачаевск" class="card-item__img">
+                    </div>
+                    <div class="card-item__name-container">
+                        <h2 class="card-item__name">Карачаевск</h2>
+                        <div class="card-item__button-container">
+                            <button class="card-item__button" type="button" aria-label="Мне нравится!"></button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="card-item">
+                    <div class="card-item__image-container">
+                        <img src="images/Эльбрус.jpg" alt="Гора Эльбрус" class="card-item__img">
+                    </div>
+                    <div class="card-item__name-container">
+                        <h2 class="card-item__name">Гора Эльбрус</h2>
+                        <div class="card-item__button-container">
+                            <button class="card-item__button" type="button" aria-label="Мне нравится!"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-item">
+                    <div class="card-item__image-container">
+                        <img src="images/Домбай.jpg" alt="Домбай" class="card-item__img">
+                    </div>
+                    <div class="card-item__name-container">
+                        <h2 class="card-item__name">Домбай</h2>
+                        <div class="card-item__button-container">
+                            <button class="card-item__button" type="button" aria-label="Мне нравится!"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-item">
+                    <div class="card-item__image-container">
+                        <img src="images/Эльбрус.jpg" alt="Гора Эльбрус" class="card-item__img">
+                    </div>
+                    <div class="card-item__name-container">
+                        <h2 class="card-item__name">Гора Эльбрус</h2>
+                        <div class="card-item__button-container">
+                            <button class="card-item__button" type="button" aria-label="Мне нравится!"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-item">
+                    <div class="card-item__image-container">
+                        <img src="images/Домбай.jpg" alt="Домбай" class="card-item__img">
+                    </div>
+                    <div class="card-item__name-container">
+                        <h2 class="card-item__name">Домбай</h2>
+                        <div class="card-item__button-container">
+                            <button class="card-item__button" type="button" aria-label="Мне нравится!"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-item">
+                    <div class="card-item__image-container">
+                        <img src="images/Карачаевск.jpg" alt="Карачаево-Черкессия" class="card-item__img">
+                    </div>
+                    <div class="card-item__name-container">
+                        <h2 class="card-item__name">Карачаево-Черкессия</h2>
+                        <div class="card-item__button-container">
+                            <button class="card-item__button" type="button" aria-label="Мне нравится!"></button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </section>
+
+            <div class="popup">
+                <div class="popup__data">
+                    <button class="popup__button" type="submit" aria-label="Закрыть"></button>
+                    <form class="edit-form">
+                        <h2 class="edit-form__header">Редактировать профиль</h2>
+                        <input class="edit-form__input" type="text" value="Жак-Ив Кусто">
+                        <input class="edit-form__input edit-form__input_type_field-of-activity" type="text"
+                            value="Исследователь океана">
+                        <button class="edit-form__button" type="submit"
+                            aria-label="Сохранить изменения">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+
+
+        <footer class="footer">
+            <p class="footer__text-container">&copy; 2022 Mesto Russia</p>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

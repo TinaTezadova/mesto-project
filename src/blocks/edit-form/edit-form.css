@@ -1,0 +1,16 @@
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 430px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+
+@media screen and (max-width: 767px) {
+    .edit-form {
+        max-width: 282px;
+        min-width: 282px;
+    }
+}

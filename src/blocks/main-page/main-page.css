@@ -1,0 +1,15 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    max-width: 1280px;
+    color: white;
+    margin: 0 auto 0 auto;
+}
+
+
+
+@media screen and (max-width: 767px) { 
+    .main-page {
+        max-width: 320px;
+    }
+}
