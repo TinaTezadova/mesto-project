@@ -1,6 +1,6 @@
 .edit-form__button {
     width: 358px;
-    height: 50px;
+    min-height: 50px;
     color: white;
     font-size: 18px;
     line-height: 22px;
@@ -22,7 +22,7 @@
 @media screen and (max-width: 767px) {
     .edit-form__button  {
         max-width: 238px;
-        height: 46px;
+        min-height: 46px;
         font-size: 14px;
         line-height: 17px;        
         margin: 45px auto 25px auto;
