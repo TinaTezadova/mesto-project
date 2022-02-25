@@ -34,6 +34,9 @@
 @import url('../blocks/card-item/__name/card-item__name.css');
 @import url('../blocks/card-item/__button/card-item__button.css');
 @import url('../blocks/card-item/__button/_active/card-item__button_active.css');
+@import url('../blocks/card-item/__button/_type/card-item__button_type_delete-card.css');
+@import url('../blocks/card-item/__image-container/card-item__image-container.css');
+
 
 @import url('../blocks/popup/popup.css');
 @import url('../blocks/popup/__button/popup__button.css');
@@ -44,3 +47,11 @@
 @import url('../blocks/edit-form/__header/edit-form__header.css');
 @import url('../blocks/edit-form/__input/edit-form__input.css');
 @import url('../blocks/edit-form/__input/__type/edit-form__input_type_field-of-activity.css');
+
+
+
+
+@import url('../blocks/photo-viewier/photo-viewier.css');
+@import url('../blocks/photo-viewier/__caption/photo-viewier__caption.css');
+@import url('../blocks/photo-viewier/__image/photo-veiwier__image.css');
+
