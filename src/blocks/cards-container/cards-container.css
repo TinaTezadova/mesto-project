@@ -6,6 +6,7 @@
     grid-auto-rows: 361px;
     gap: 17px;
     margin: 51px auto 67px auto;
+    min-height: 55vh;
     
 }
 

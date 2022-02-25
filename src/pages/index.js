@@ -5,7 +5,7 @@ const userNameFromPopup = editProfilePopup.querySelector('#userName');
 const userNameFromProfile = document.querySelector('.profile__name');
 const userFieldOfActivityFromPopup = editProfilePopup.querySelector('#user-field-of-activity');
 const userFieldOfActivityFromProfile = document.querySelector('.profile__field-of-activity');
-const form = editProfilePopup.querySelector('.edit-form');
+const editProfileForm = editProfilePopup.querySelector('.edit-form');
 const initialCards = [
   {
     name: 'Архыз',
@@ -42,7 +42,6 @@ const saveNewCardBtn = addNewCardPopup.querySelector('.edit-form__button');
 const cardName = addNewCardPopup.querySelector('#card-name');
 const cardLink = addNewCardPopup.querySelector('#card-link');
 const addNewCardForm = addNewCardPopup.querySelector('.edit-form');
-const addNewCardPopupInputs = Array.from(addNewCardPopup.querySelectorAll('.edit-form__input'));
 const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierImage = photoViewierPopup.querySelector('.photo-veiwier__image');
 const photoViewierCaption = photoViewierPopup.querySelector('.photo-viewier__caption');
@@ -67,6 +66,21 @@ function saveEditForm (event) {
   closePopup(editProfilePopup)
 };
 
+const handleCardLikeBtnClick = (event) => {
+  event.target.classList.toggle('card-item__button_active')
+};
+
+const handleCardDeleteBtnClick = (event) => {
+  event.target.closest('.card-item').remove();
+};
+
+const handleCardItemClick = (link, name) => {
+  photoViewierImage.src = link;
+  photoViewierImage.alt = name;
+  photoViewierCaption.textContent = name;
+  openPopup(photoViewierPopup)
+}
+
 function createCardsItem (name, link) {
   const cardItem = cartItemTemplate.querySelector('.card-item').cloneNode(true);
   const cardItemImg = cardItem.querySelector('.card-item__img');
@@ -75,21 +89,14 @@ function createCardsItem (name, link) {
   const deleteBtn = cardItem.querySelector('.card-item__button_type_delete-card');
 
   cardName.textContent = name;
-  cardItemImg.setAttribute('src', link);
-  cardItemImg.setAttribute('alt', name);
-  likeBtn.addEventListener('click', (event) => {
-    event.target.classList.toggle('card-item__button_active')
-  });
+  cardItemImg.src = link;
+  cardItemImg.alt = name;
+  likeBtn.addEventListener('click', handleCardLikeBtnClick);
 
-  deleteBtn.addEventListener('click', (event) => {
-    event.target.closest('.card-item').remove();
-  });
+  deleteBtn.addEventListener('click', handleCardDeleteBtnClick);
 
   cardItemImg.addEventListener('click', () => {
-    photoViewierImage.setAttribute('src', link);
-    photoViewierImage.setAttribute('alt', name);
-    photoViewierCaption.textContent = name;
-    openPopup(photoViewierPopup)
+    handleCardItemClick(link, name)
   })
 
 
@@ -98,10 +105,8 @@ function createCardsItem (name, link) {
 };
 
 const resetInputsValue = () => {
-  addNewCardPopupInputs.forEach((item) => {
-    item.value = ''
-  })
-}
+  addNewCardForm.reset()
+};
 
 const addNewCard = (event) => {
   event.preventDefault();
@@ -110,30 +115,40 @@ const addNewCard = (event) => {
   resetInputsValue()
 };
 
-editProfileBtn.addEventListener('click', () => {
-  openPopup(editProfilePopup);
+const handleCloseEditProfileBtnClick = () => {
+  closePopup(editProfilePopup)
+};
+
+const handleEditProfileBtnClick = () => {
   userNameFromPopup.value = userNameFromProfile.textContent;
   userFieldOfActivityFromPopup.value = userFieldOfActivityFromProfile.textContent;
-});
+  openPopup(editProfilePopup);
+};
 
-closeEditProfileBtn.addEventListener('click', () => {
-  closePopup(editProfilePopup)
-});
+const handleAddNewCardBtnClick = () => {
+  openPopup(addNewCardPopup)
+};
 
-form.addEventListener('submit', saveEditForm);
+const handleCloseAddCardBtnClick = () => {
+  closePopup(addNewCardPopup)
+};
+
+const handlePhotoViewierCloseBtnClick = () => {
+  closePopup(photoViewierPopup)
+}
+
+editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
+
+closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
+
+editProfileForm.addEventListener('submit', saveEditForm);
 
 initialCards.forEach(el => cardsContainer.append(createCardsItem(el.name, el.link)));
 
-addNewCardBtn.addEventListener('click', () => {
-  openPopup(addNewCardPopup)
-});
+addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
-closeAddCardBtn.addEventListener('click', () => {
-  closePopup(addNewCardPopup)
-})
+closeAddCardBtn.addEventListener('click', handleCloseAddCardBtnClick)
 
 addNewCardForm.addEventListener('submit', addNewCard);
 
-photoViewierCloseBtn.addEventListener('click', () => {
-  closePopup(photoViewierPopup)
-})
+photoViewierCloseBtn.addEventListener('click', handlePhotoViewierCloseBtnClick)
