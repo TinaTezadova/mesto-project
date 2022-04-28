@@ -1,0 +1,11 @@
+.edit-form__label {
+    max-width: 358px;
+    width: 100%;
+    margin: 0 auto 30px auto;
+}
+
+@media screen and (max-width: 767px) {
+    .edit-form__label {
+        max-width: 238px;
+    }
+}

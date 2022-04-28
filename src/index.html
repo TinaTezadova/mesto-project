@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./src/pages/index.css">
     <title>Mesto</title>
 </head>
 
 <body class="root">
     <div class="main-page">
         <header class="header">
-            <img src="./src/images/header_img.svg" alt="Логотип" class="header__img">
+            <img src="<%=require('./images/header_img.svg')%>" alt="Логотип" class="header__img">
         </header>
 
         <main class="content">
@@ -101,9 +100,18 @@
             <button class="popup__button" type="button"></button>
             <form class="edit-form" name="edit-form">
                 <h2 class="edit-form__header">Редактировать профиль</h2>
-                <input class="edit-form__input" type="text" value="" name="user-name" id='userName'>
-                <input class="edit-form__input edit-form__input_type_field-of-activity" type="text"
-                    value="" name="user-field-of-activity" id="user-field-of-activity">
+                <label for="userName" class="edit-form__label">
+                    <input class="edit-form__input" type="text" value="" name="user-name"
+                        id='userName' placeholder="Имя" minlength="2" maxlength="40" required>
+                    <span class="edit-form__input__signature"></span>
+                </label>
+                <label for="user-field-of-activity" class="edit-form__label edit-form__label_type_field-of-activity">
+                    <input class="edit-form__input edit-form__input_type_field-of-activity" type="text" value=""
+                        name="user-field-of-activity" id="user-field-of-activity" placeholder="О себе" minlength="2" maxlength="200" required>
+                    <span class="edit-form__input__signature"></span>
+                </label>
+
+
                 <button class="edit-form__button" type="submit">Сохранить</button>
             </form>
         </div>
@@ -114,10 +122,17 @@
             <button class="popup__button" type="button" id='addCardPopupBtn'></button>
             <form class="edit-form" name="edit-form">
                 <h2 class="edit-form__header">Новое место</h2>
-                <input class="edit-form__input" type="text" value="" name="card-name" id='card-name' placeholder="Название">
-                <input class="edit-form__input edit-form__input_type_field-of-activity" type="text"
-                    value="" name="card-link" id="card-link" placeholder="Ссылка на картинку">
-                <button class="edit-form__button" type="submit">Создать</button>
+                <label for="card-name" class="edit-form__label">
+                    <input class="edit-form__input" type="text" value="" name="card-name" id='card-name'
+                    placeholder="Название" minlength="2" maxlength="30" required>
+                    <span class="edit-form__input__signature"></span>
+                </label>
+                <label for="card-name" class="edit-form__label edit-form__label_type_field-of-activity">
+                    <input class="edit-form__input edit-form__input_type_field-of-activity" type="url" value=""
+                    name="card-link" id="card-link" placeholder="Ссылка на картинку" required>
+                    <span class="edit-form__input__signature"></span>
+                </label>
+                <button class="edit-form__button edit-form__button_disabled" type="submit" disabled>Создать</button>
             </form>
         </div>
     </div>
@@ -126,7 +141,8 @@
         <div class="popup__data">
             <button class="popup__button" type="button" id="photo-viewier-close-btn"></button>
             <figure class="photo-viewier">
-                <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="" class="photo-veiwier__image">
+                <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt=""
+                    class="photo-veiwier__image">
                 <figcaption class="photo-viewier__caption"></figcaption>
             </figure>
         </div>
@@ -136,10 +152,10 @@
 
         <div class="card-item">
             <div class="card-item__image-container">
-            <img src="./src/images/Карачаевск.jpg" alt="Карачаево-Черкессия" class="card-item__img">
-            <button class="card-item__button card-item__button_type_delete-card" type="button"
-          aria-label="Удалить"></button>
-        </div>
+                <img src="<%=require('./images/Карачаевск.jpg')%>" alt="Карачаево-Черкессия" class="card-item__img">
+                <button class="card-item__button card-item__button_type_delete-card" type="button"
+                    aria-label="Удалить"></button>
+            </div>
             <div class="card-item__name-container">
                 <h2 class="card-item__name">Карачаево-Черкессия</h2>
 
@@ -150,8 +166,6 @@
         </div>
 
     </template>
-
-    <script src="./src/pages/index.js"></script>
 
 </body>
 
