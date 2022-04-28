@@ -44,9 +44,15 @@
 @import url('../blocks/popup/_open/popup_open.css');
 @import url('../blocks/edit-form/edit-form.css');
 @import url('../blocks/edit-form/__button/edit-form__button.css');
+@import url('../blocks/edit-form/__button/_disabled/edit-form__button_disabled.css');
 @import url('../blocks/edit-form/__header/edit-form__header.css');
 @import url('../blocks/edit-form/__input/edit-form__input.css');
 @import url('../blocks/edit-form/__input/__type/edit-form__input_type_field-of-activity.css');
+@import url('../blocks/edit-form/__input/__error/edit-form__input_error.css');
+@import url('../blocks/edit-form/__signature/edit-form__input__signature.css');
+@import url('../blocks/edit-form/__signature/_active/edit-form__input__signature_active.css');
+@import url('../blocks/edit-form/__label/edit-form__label.css');
+@import url('../blocks/edit-form/__label/_type/edit-form__label_type_field-of-activity.css');
 
 
 

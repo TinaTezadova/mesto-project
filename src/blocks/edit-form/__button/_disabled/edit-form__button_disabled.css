@@ -1,0 +1,10 @@
+.edit-form__button_disabled {
+    border: 1px solid #000000;
+    opacity: 0.2;
+    background-color: white;
+    color: #000000;
+}
+
+.edit-form__button_disabled:hover {
+    opacity: 0.2;
+}
