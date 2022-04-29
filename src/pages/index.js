@@ -1,7 +1,7 @@
 import './index.css';
 import {enableValidation} from '../components/validate';
-import {addNewCard, handleAddNewCardBtnClick, handleCloseAddCardBtnClick, handlePhotoViewierCloseBtnClick, renderInitialCard} from '../components/card';
-import {openPopup, closePopup, saveEditForm, enableClosePopup} from '../components/modal';
+import {addNewCard, createCardsItem, handleAddNewCardBtnClick, handleCloseAddCardBtnClick } from '../components/card';
+import {openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick} from '../components/modal';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -18,6 +18,39 @@ const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
 const addNewCardForm = addNewCardPopup.querySelector('.edit-form');
 const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierCloseBtn = photoViewierPopup.querySelector('#photo-viewier-close-btn');
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
+
+export function saveEditForm(event, params) {
+  event.preventDefault();
+  params.userNameFromProfile.textContent = params.userNameFromPopup.value;
+  params.userFieldOfActivityFromProfile.textContent = params.userFieldOfActivityFromPopup.value;
+  closePopup(params.editProfilePopup)
+};
 
 const handleCloseEditProfileBtnClick = () => {
   closePopup(editProfilePopup)
@@ -46,7 +79,7 @@ closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
 
 editProfileForm.addEventListener('submit', hanleSaveEditForm);
 
-renderInitialCard(cardsContainer);
+initialCards.forEach(el => cardsContainer.append(createCardsItem(el.name, el.link)));
 
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
