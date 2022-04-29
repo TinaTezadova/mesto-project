@@ -7,13 +7,13 @@ const showError = (input, errorMessage, inputErrorClass, errorClass) => {
 
 const hideError = (input, inputErrorClass, errorClass) => {
     input.classList.remove(inputErrorClass);
+    console.log(input);
     const formError = input?.nextSibling.nextElementSibling
     formError.classList.remove(errorClass);
     formError.textContent = '';
   };
   
   const checkFormInputsVlid = (formInputs) => {
-      console.log(formInputs);
     return formInputs.filter((el) => el.validity.valid === true).length === formInputs.length
   }
 
@@ -25,7 +25,7 @@ const checkInputValidity = (input, formInputs, button, params) => {
         button.disabled = true;
       }
     } else {
-      hideError(input);
+      hideError(input, params.inputErrorClass, params.errorClass);
       if (checkFormInputsVlid(formInputs, params.inputErrorClass, params.errorClass)) {
         button.classList.remove(params.inactiveButtonClass);
         button.disabled = false;
@@ -34,7 +34,6 @@ const checkInputValidity = (input, formInputs, button, params) => {
   };
 
 export const enableValidation = (params) => {
-    console.log(params);
     const forms = document.querySelectorAll(params.formSelector);
     forms.forEach((form) => {
       const formInputs = Array.from(form.querySelectorAll(params.inputSelector));

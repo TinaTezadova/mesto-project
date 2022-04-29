@@ -3,6 +3,7 @@
     opacity: 0.2;
     background-color: white;
     color: #000000;
+    cursor: auto;
 }
 
 .edit-form__button_disabled:hover {
