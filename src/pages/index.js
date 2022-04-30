@@ -1,7 +1,8 @@
 import './index.css';
 import {enableValidation} from '../components/validate';
-import {addNewCard, createCardsItem, handleAddNewCardBtnClick, handleCloseAddCardBtnClick } from '../components/card';
+import {createCardsItem, handleCloseAddCardBtnClick } from '../components/card';
 import {openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick} from '../components/modal';
+import { resetInputsValue } from '../components/utils';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -18,6 +19,8 @@ const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
 const addNewCardForm = addNewCardPopup.querySelector('.edit-form');
 const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierCloseBtn = photoViewierPopup.querySelector('#photo-viewier-close-btn');
+const cardName = addNewCardPopup.querySelector('#card-name');
+const cardLink = addNewCardPopup.querySelector('#card-link');
 const initialCards = [
   {
     name: 'Архыз',
@@ -72,6 +75,20 @@ const hanleSaveEditForm = (event) => {
   }
   saveEditForm(event, params)
 }
+
+export const addNewCard = (event, cardsContainer, addNewCardForm) => {
+  event.preventDefault();
+  cardsContainer.prepend(createCardsItem(cardName.value, cardLink.value));
+  closePopup(addNewCardPopup);
+  resetInputsValue(addNewCardForm)
+};
+
+export const handleAddNewCardBtnClick = () => {
+  addNewCardPopup.querySelector('.edit-form__button').classList.add('edit-form__button_disabled')
+  openPopup(addNewCardPopup)
+};
+
+
 
 editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
 
