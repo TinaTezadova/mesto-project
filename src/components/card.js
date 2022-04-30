@@ -7,8 +7,6 @@ const saveNewCardBtn = addNewCardPopup.querySelector('.edit-form__button');
 const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierImage = photoViewierPopup.querySelector('.photo-veiwier__image');
 const photoViewierCaption = photoViewierPopup.querySelector('.photo-viewier__caption');
-const cardName = addNewCardPopup.querySelector('#card-name');
-const cardLink = addNewCardPopup.querySelector('#card-link');
 
 
 const handleCardLikeBtnClick = (event) => {
@@ -47,19 +45,6 @@ export function createCardsItem(name, link) {
   
     return cardItem
   
-  };
-
-
-  export const addNewCard = (event, cardsContainer, addNewCardForm) => {
-    event.preventDefault();
-    cardsContainer.prepend(createCardsItem(cardName.value, cardLink.value));
-    closePopup(addNewCardPopup);
-    resetInputsValue(addNewCardForm)
-  };
-
-  export const handleAddNewCardBtnClick = () => {
-    addNewCardPopup.querySelector('.edit-form__button').classList.add('edit-form__button_disabled')
-    openPopup(addNewCardPopup)
   };
 
   export const handleCloseAddCardBtnClick = () => {
