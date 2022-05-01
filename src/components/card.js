@@ -1,9 +1,7 @@
-import {resetInputsValue} from './utils';
-import {closePopup, openPopup} from './modal';
+import { openPopup } from './modal';
 
 const addNewCardPopup = document.querySelector('#addCard');
 const cartItemTemplate = document.querySelector('#card-item-template').content;
-const saveNewCardBtn = addNewCardPopup.querySelector('.edit-form__button');
 const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierImage = photoViewierPopup.querySelector('.photo-veiwier__image');
 const photoViewierCaption = photoViewierPopup.querySelector('.photo-viewier__caption');
@@ -45,8 +43,4 @@ export function createCardsItem(name, link) {
   
     return cardItem
   
-  };
-
-  export const handleCloseAddCardBtnClick = () => {
-    closePopup(addNewCardPopup)
   };
