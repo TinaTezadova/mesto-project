@@ -1,6 +1,6 @@
 import './index.css';
 import {enableValidation} from '../components/validate';
-import {createCardsItem, handleCloseAddCardBtnClick } from '../components/card';
+import {createCardsItem } from '../components/card';
 import {openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick} from '../components/modal';
 import { resetInputsValue } from '../components/utils';
 
@@ -86,6 +86,10 @@ export const addNewCard = (event, cardsContainer, addNewCardForm) => {
 export const handleAddNewCardBtnClick = () => {
   addNewCardPopup.querySelector('.edit-form__button').classList.add('edit-form__button_disabled')
   openPopup(addNewCardPopup)
+};
+
+export const handleCloseAddCardBtnClick = () => {
+  closePopup(addNewCardPopup)
 };
 
 
