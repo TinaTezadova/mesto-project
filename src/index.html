@@ -16,8 +16,13 @@
 
         <main class="content">
             <section class="profile">
-                <img class="profile__avatar" src='https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg'
+                <div class="profile__avatar-wrapper">
+                    <img class="profile__avatar" src='https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg'
                     alt="Аватарка пользователя">
+                    <div class="profile__avatar-edit"></div>
+
+                </div>
+                
 
                 <div class="profile__info-wrapper">
                     <div class="profile__name-wrapper">
@@ -96,6 +101,31 @@
         </div>
     </div>
 
+    <div class="popup" id='editAvatar'>
+        <div class="popup__data">
+            <button class="popup__button" type="button" id='editAvatarPopupBtn'></button>
+            <form class="edit-form" name="edit-form">
+                <h2 class="edit-form__header">Обновить аватар</h2>
+                <label for="card-name" class="edit-form__label edit-form__label_type_field-of-activity">
+                    <input class="edit-form__input edit-form__input_type_field-of-activity" type="url" value=""
+                    name="card-link" id="card-link" placeholder="Ссылка на новый аватар" required>
+                    <span class="edit-form__input__signature"></span>
+                </label>
+                <button class="edit-form__button edit-form__button_disabled" type="submit" disabled>Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup" id='deleteCard'>
+        <div class="popup__data">
+            <button class="popup__button" type="button" id='deleteCardPopupBtn'></button>
+            <form class="edit-form" name="edit-form">
+                <h2 class="edit-form__header edit-form__header_type_access">Вы уверены?</h2>
+                <button class="edit-form__button edit-form__button_type-access" type="submit">Да</button>
+            </form>
+        </div>
+    </div>
+
     <template id='card-item-template'>
 
         <div class="card-item">
@@ -106,8 +136,12 @@
             </div>
             <div class="card-item__name-container">
                 <h2 class="card-item__name">Карачаево-Черкессия</h2>
+                <div class="card-item__likes">
+                    <button class="card-item__button" type="button" id='card-item__like-button'></button>
+                    <span class="card-item__likes-count"></span>
+                </div>
 
-                <button class="card-item__button" type="button" id='card-item__like-button'></button>
+                
 
             </div>
 
