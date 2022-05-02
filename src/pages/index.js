@@ -1,6 +1,6 @@
 import './index.css';
 import { enableValidation } from '../components/validate';
-import { createCardsItem } from '../components/card';
+import { createCardItem, deleteCardId } from '../components/card';
 import { openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick } from '../components/modal';
 import { resetInputsValue } from '../components/utils';
 import { getUserInfo, getInitialCards, updateUserInfo, createNewCard, updateAvatar, deleteCard } from '../components/api'
@@ -30,28 +30,27 @@ const editAvatarPopup = document.querySelector('#editAvatar');
 const editAvatarPopupForm = editAvatarPopup.querySelector('.edit-form');
 const deleteCardPopup = document.querySelector('#deleteCard');
 const deleteCardForm = deleteCardPopup.querySelector('.edit-form');
+let currentUserId;
+
+const changePopupBtnText = (popup, text) => {
+  const button = popup.querySelector('.edit-form__button');
+  button.textContent = text;
+}
 
 function saveEditForm(event, params) {
   event.preventDefault();
-  const button = params.editProfilePopup.querySelector('.edit-form__button');
-  button.textContent = 'Сохранение...';
+  changePopupBtnText(editProfilePopup, 'Сохранение...');
   updateUserInfo({
     name: params.userNameFromPopup.value,
     about: params.userFieldOfActivityFromPopup.value
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
     .then((result) => {
       params.userNameFromProfile.textContent = result.name;
       params.userFieldOfActivityFromProfile.textContent = result.about;
+      closePopup(params.editProfilePopup);
     })
     .finally(() => {
-      closePopup(params.editProfilePopup);
-      button.textContent = 'Сохранить';
+      changePopupBtnText(editProfilePopup, 'Сохранить')
     })
     .catch((err) => {
       console.log(err);
@@ -81,25 +80,18 @@ const hanleSaveEditForm = (event) => {
 
 const addNewCard = (event, cardsContainer, addNewCardForm) => {
   event.preventDefault();
-  const button = addNewCardPopup.querySelector('.edit-form__button');
-  button.textContent = 'Сохранение...';
+  changePopupBtnText(addNewCardPopup, 'Сохранение...');
   createNewCard({
     name: cardName.value,
     link: cardLink.value
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
     .then((result) => {
-      cardsContainer.prepend(createCardsItem(result.name, result.link, result.likes.length, result.owner._id, result._id));
-    })
-    .finally(() => {
+      cardsContainer.prepend(createCardItem(result.name, result.link, result.likes.length, result.owner._id, result._id, currentUserId));
       closePopup(addNewCardPopup);
       resetInputsValue(addNewCardForm);
-      button.textContent = 'Создать';
+    })
+    .finally(() => {
+      changePopupBtnText(addNewCardPopup, 'Создать');
     })
     .catch((err) => {
       console.log(err);
@@ -122,24 +114,17 @@ const handleEditAvatarClick = () => {
 
 const handleSaveAvatarClick = (e) => {
   e.preventDefault();
-  const button = editAvatarPopup.querySelector('.edit-form__button');
-  button.textContent = 'Сохранение...';
+  changePopupBtnText(editAvatarPopup, 'Сохранение...');
   const avatar = editAvatarPopup.querySelector('.edit-form__input').value;
   const form = editAvatarPopup.querySelector('.edit-form');
   updateAvatar(avatar)
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
     .then((result) => {
       userAvatarWrap.src = result.avatar;
+      closePopup(editAvatarPopup);
+      resetInputsValue(form);
     })
     .finally(() => {
-      closePopup(editAvatarPopup);
-      resetInputsValue(form)
-      button.textContent = 'Сохранить';
+      changePopupBtnText(editAvatarPopup, 'Сохранить');
     })
     .catch((err) => {
       console.log(err);
@@ -148,19 +133,10 @@ const handleSaveAvatarClick = (e) => {
 
 const handleDeleteCardAccessClick = (e) => {
   e.preventDefault();
-  const cardId = deleteCardPopup.getAttribute('cardId');
-  const cardItem = document.getElementById(`${cardId}`);
-  deleteCard(cardId)
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+  const cardItem = document.getElementById(`${deleteCardId}`);
+  deleteCard(deleteCardId)
     .then((result) => {
       cardItem.remove();
-    })
-    .finally(() => {
       closePopup(deleteCardPopup)
     })
     .catch((err) => {
@@ -169,6 +145,23 @@ const handleDeleteCardAccessClick = (e) => {
 
 }
 
+Promise.all([
+  getUserInfo(),
+  getInitialCards()
+])
+  .then((values) => {
+    const userInfo = values[0];
+    const cardsInfo = values[1];
+    currentUserId = userInfo._id;
+    userNameWrap.textContent = userInfo.name;
+    userFieldOfActivityWrap.textContent = userInfo.about;
+    userAvatarWrap.src = userInfo.avatar;
+    cardsInfo.forEach(el => cardsContainer.append(createCardItem(el.name, el.link, el.likes.length, el.owner._id, el._id, currentUserId)));
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
 
 
 editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
@@ -176,20 +169,6 @@ editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
 closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
 
 editProfileForm.addEventListener('submit', hanleSaveEditForm);
-
-getInitialCards()
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .then((result) => {
-    result.forEach(el => cardsContainer.append(createCardsItem(el.name, el.link, el.likes.length, el.owner._id, el._id)));
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
@@ -208,10 +187,10 @@ enableValidation({
 });
 
 enableClosePopup();
-getUserInfo(userNameWrap, userFieldOfActivityWrap, userAvatarWrap);
 
 userAvatar.addEventListener('click', handleEditAvatarClick);
 editAvatarPopupForm.addEventListener('submit', handleSaveAvatarClick);
-deleteCardForm.addEventListener('submit', handleDeleteCardAccessClick)
+deleteCardForm.addEventListener('submit', handleDeleteCardAccessClick);
+photoViewierPopup.querySelector('.photo-viewier').addEventListener('click', (e) => e.stopPropagation())
 
 
