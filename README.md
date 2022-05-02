@@ -13,4 +13,4 @@
 
 **Ссылка на сайт**
 
-* [Mesto](https://tinatezadova.github.io/mesto-project/index.html)
+* [Mesto](https://tinatezadova.github.io/mesto-project/)

@@ -1,0 +1,16 @@
+.profile__avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    position: relative;
+}
+
+.profile__avatar-wrapper:hover .profile__avatar-edit {
+ display: block;
+}
+
+@media screen and (max-width: 767px) { 
+    .profile__avatar-wrapper {
+        margin: 0 auto 0 auto;
+    }
+}

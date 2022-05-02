@@ -1,4 +1,5 @@
 const popups = document.querySelectorAll('.popup');
+const photoViewierPopup = document.querySelector('#photo-viewier');
 
 const closePopupWithEsc = (e) => {
     const popupActive = document.querySelector('.popup_open')
@@ -7,7 +8,7 @@ const closePopupWithEsc = (e) => {
     }
 }
 
-const handleEscClose = closePopupWithEsc.bind() 
+const handleEscClose = closePopupWithEsc.bind()
 
 export function closePopup(popup) {
     document.removeEventListener('keydown', handleEscClose);
@@ -29,4 +30,9 @@ export const enableClosePopup = () => {
 
 export const handlePhotoViewierCloseBtnClick = () => {
     closePopup(photoViewierPopup)
-  }
+}
+
+export const deleteCardAccessPopupOpen = (popup, id) => {
+    popup.setAttribute('cardId', id)
+    openPopup(popup)
+}
