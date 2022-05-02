@@ -1,4 +1,3 @@
-export const myId = '2db01ba02817beb6216f1735';
 const config = {
     baseUrl: 'https://nomoreparties.co/v1/plus-cohort-9',
     headers: {
@@ -7,26 +6,28 @@ const config = {
     }
 };
 
-export const getUserInfo = (userNameWrap, userFieldOfActivityWrap, userAvatarWrap) => {
-    return fetch(`${config.baseUrl}/users/me`, { headers: config.headers })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then((result) => {
-            userNameWrap.textContent = result.name;
-            userFieldOfActivityWrap.textContent = result.about;
-            userAvatarWrap.src = result.avatar
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+export const getUserInfo = () => {
+    return fetch(`${config.baseUrl}/users/me`, { 
+        headers: config.headers 
+    })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 };
 
 export const getInitialCards = () => {
-    return fetch(`${config.baseUrl}/cards`, { headers: config.headers })
+    return fetch(`${config.baseUrl}/cards`, { 
+        headers: config.headers 
+    })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 };
 
 export const updateUserInfo = ({ name, about }) => {
@@ -36,6 +37,12 @@ export const updateUserInfo = ({ name, about }) => {
             name,
             about
         })
+    })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
     })
 };
 
@@ -47,14 +54,38 @@ export const createNewCard = ({ name, link }) => {
             link
         })
     })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 }
 
 export const addLike = (id) => {
-    return fetch(`${config.baseUrl}/cards/likes/${id}`, { method: 'PUT', headers: config.headers })
+    return fetch(`${config.baseUrl}/cards/likes/${id}`, { 
+        method: 'PUT', 
+        headers: config.headers 
+    })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 };
 
 export const removeLike = (id) => {
-    return fetch(`${config.baseUrl}/cards/likes/${id}`, { method: 'DELETE', headers: config.headers })
+    return fetch(`${config.baseUrl}/cards/likes/${id}`, { 
+        method: 'DELETE', 
+        headers: config.headers 
+    })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 };
 
 export const updateAvatar = (avatar) => {
@@ -64,8 +95,23 @@ export const updateAvatar = (avatar) => {
             avatar
         })
     })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 };
 
 export const deleteCard = (id) => {
-    return fetch(`${config.baseUrl}/cards/${id}`, { method: 'DELETE', headers: config.headers })
+    return fetch(`${config.baseUrl}/cards/${id}`, { 
+        method: 'DELETE', 
+        headers: config.headers 
+    })
+    .then(res => { 
+        if (res.ok) { 
+            return res.json(); 
+        } 
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    })
 };
