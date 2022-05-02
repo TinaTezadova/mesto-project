@@ -1,5 +1,6 @@
 .card-item__name-container {
     width: 246px;
     display: flex;
-    margin: 25px auto 31px 21px;
+    margin: 22px auto 31px 21px;
+    align-items: center;
 }

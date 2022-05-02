@@ -1,0 +1,8 @@
+.card-item__likes {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: auto 0 auto auto;
+    max-width: 22px;
+    width: 100%;
+}

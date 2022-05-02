@@ -1,8 +1,9 @@
 import './index.css';
-import {enableValidation} from '../components/validate';
-import {createCardsItem } from '../components/card';
-import {openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick} from '../components/modal';
+import { enableValidation } from '../components/validate';
+import { createCardsItem } from '../components/card';
+import { openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick } from '../components/modal';
 import { resetInputsValue } from '../components/utils';
+import { getUserInfo, getInitialCards, updateUserInfo, createNewCard, updateAvatar, deleteCard } from '../components/api'
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -21,38 +22,40 @@ const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierCloseBtn = photoViewierPopup.querySelector('#photo-viewier-close-btn');
 const cardName = addNewCardPopup.querySelector('#card-name');
 const cardLink = addNewCardPopup.querySelector('#card-link');
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+const userNameWrap = document.querySelector('.profile__name');
+const userFieldOfActivityWrap = document.querySelector('.profile__field-of-activity');
+const userAvatarWrap = document.querySelector('.profile__avatar');
+const userAvatar = document.querySelector('.profile__avatar-wrapper');
+const editAvatarPopup = document.querySelector('#editAvatar');
+const editAvatarPopupForm = editAvatarPopup.querySelector('.edit-form');
+const deleteCardPopup = document.querySelector('#deleteCard');
+const deleteCardForm = deleteCardPopup.querySelector('.edit-form');
 
-export function saveEditForm(event, params) {
+function saveEditForm(event, params) {
   event.preventDefault();
-  params.userNameFromProfile.textContent = params.userNameFromPopup.value;
-  params.userFieldOfActivityFromProfile.textContent = params.userFieldOfActivityFromPopup.value;
-  closePopup(params.editProfilePopup)
+  const button = params.editProfilePopup.querySelector('.edit-form__button');
+  button.textContent = 'Сохранение...';
+  updateUserInfo({
+    name: params.userNameFromPopup.value,
+    about: params.userFieldOfActivityFromPopup.value
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((result) => {
+      params.userNameFromProfile.textContent = result.name;
+      params.userFieldOfActivityFromProfile.textContent = result.about;
+    })
+    .finally(() => {
+      closePopup(params.editProfilePopup);
+      button.textContent = 'Сохранить';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const handleCloseEditProfileBtnClick = () => {
@@ -76,21 +79,95 @@ const hanleSaveEditForm = (event) => {
   saveEditForm(event, params)
 }
 
-export const addNewCard = (event, cardsContainer, addNewCardForm) => {
+const addNewCard = (event, cardsContainer, addNewCardForm) => {
   event.preventDefault();
-  cardsContainer.prepend(createCardsItem(cardName.value, cardLink.value));
-  closePopup(addNewCardPopup);
-  resetInputsValue(addNewCardForm)
+  const button = addNewCardPopup.querySelector('.edit-form__button');
+  button.textContent = 'Сохранение...';
+  createNewCard({
+    name: cardName.value,
+    link: cardLink.value
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((result) => {
+      cardsContainer.prepend(createCardsItem(result.name, result.link, result.likes.length, result.owner._id, result._id));
+    })
+    .finally(() => {
+      closePopup(addNewCardPopup);
+      resetInputsValue(addNewCardForm);
+      button.textContent = 'Создать';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
 };
 
-export const handleAddNewCardBtnClick = () => {
+const handleAddNewCardBtnClick = () => {
   addNewCardPopup.querySelector('.edit-form__button').classList.add('edit-form__button_disabled')
   openPopup(addNewCardPopup)
 };
 
-export const handleCloseAddCardBtnClick = () => {
+const handleCloseAddCardBtnClick = () => {
   closePopup(addNewCardPopup)
 };
+
+const handleEditAvatarClick = () => {
+  openPopup(editAvatarPopup)
+}
+
+const handleSaveAvatarClick = (e) => {
+  e.preventDefault();
+  const button = editAvatarPopup.querySelector('.edit-form__button');
+  button.textContent = 'Сохранение...';
+  const avatar = editAvatarPopup.querySelector('.edit-form__input').value;
+  const form = editAvatarPopup.querySelector('.edit-form');
+  updateAvatar(avatar)
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((result) => {
+      userAvatarWrap.src = result.avatar;
+    })
+    .finally(() => {
+      closePopup(editAvatarPopup);
+      resetInputsValue(form)
+      button.textContent = 'Сохранить';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+const handleDeleteCardAccessClick = (e) => {
+  e.preventDefault();
+  const cardId = deleteCardPopup.getAttribute('cardId');
+  const cardItem = document.getElementById(`${cardId}`);
+  deleteCard(cardId)
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((result) => {
+      cardItem.remove();
+    })
+    .finally(() => {
+      closePopup(deleteCardPopup)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+}
 
 
 
@@ -100,7 +177,19 @@ closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
 
 editProfileForm.addEventListener('submit', hanleSaveEditForm);
 
-initialCards.forEach(el => cardsContainer.append(createCardsItem(el.name, el.link)));
+getInitialCards()
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .then((result) => {
+    result.forEach(el => cardsContainer.append(createCardsItem(el.name, el.link, el.likes.length, el.owner._id, el._id)));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
@@ -119,3 +208,10 @@ enableValidation({
 });
 
 enableClosePopup();
+getUserInfo(userNameWrap, userFieldOfActivityWrap, userAvatarWrap);
+
+userAvatar.addEventListener('click', handleEditAvatarClick);
+editAvatarPopupForm.addEventListener('submit', handleSaveAvatarClick);
+deleteCardForm.addEventListener('submit', handleDeleteCardAccessClick)
+
+

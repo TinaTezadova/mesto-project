@@ -1,3 +1,3 @@
-export const resetInputsValue = (addNewCardForm) => {
-    addNewCardForm.reset()
+export const resetInputsValue = (form) => {
+  form.reset()
   };
