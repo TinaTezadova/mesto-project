@@ -1,11 +1,13 @@
 import { openPopup, deleteCardAccessPopupOpen } from './modal';
-import { addLike, removeLike } from './api'
+import Api from './api';
+import { config } from '../utils/constants';
 
 const cartItemTemplate = document.querySelector('#card-item-template').content;
 const photoViewierPopup = document.querySelector('#photo-viewier');
 const photoViewierImage = photoViewierPopup.querySelector('.photo-veiwier__image');
 const photoViewierCaption = photoViewierPopup.querySelector('.photo-viewier__caption');
 const deleteCardPopup = document.querySelector('#deleteCard');
+const api = new Api(config);
 export let deleteCardId;
 
 const handleCardLikeBtnClick = (event) => {
@@ -13,7 +15,7 @@ const handleCardLikeBtnClick = (event) => {
   const cardId = cardItem.id;
   const likeCount = cardItem.querySelector('.card-item__likes-count');
   if (event.target.classList.contains('card-item__button_active')) {
-    removeLike(cardId)
+    api.removeLike(cardId)
       .then((result) => {
         event.target.classList.remove('card-item__button_active');
         likeCount.textContent = result.likes.length
@@ -23,7 +25,7 @@ const handleCardLikeBtnClick = (event) => {
       });
   }
   else {
-    addLike(cardId)
+    api.addLike(cardId)
       .then((result) => {
         event.target.classList.add('card-item__button_active');
         likeCount.textContent = result.likes.length;

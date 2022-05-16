@@ -3,7 +3,8 @@ import { enableValidation } from '../components/validate';
 import { createCardItem, deleteCardId } from '../components/card';
 import { openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick } from '../components/modal';
 import { resetInputsValue } from '../components/utils';
-import { getUserInfo, getInitialCards, updateUserInfo, createNewCard, updateAvatar, deleteCard } from '../components/api'
+import Api from '../components/api';
+import { config } from '../utils/constants';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -31,6 +32,7 @@ const editAvatarPopupForm = editAvatarPopup.querySelector('.edit-form');
 const deleteCardPopup = document.querySelector('#deleteCard');
 const deleteCardForm = deleteCardPopup.querySelector('.edit-form');
 let currentUserId;
+const api = new Api(config)
 
 const changePopupBtnText = (popup, text) => {
   const button = popup.querySelector('.edit-form__button');
@@ -40,7 +42,7 @@ const changePopupBtnText = (popup, text) => {
 function saveEditForm(event, params) {
   event.preventDefault();
   changePopupBtnText(editProfilePopup, 'Сохранение...');
-  updateUserInfo({
+  api.updateUserInfo({
     name: params.userNameFromPopup.value,
     about: params.userFieldOfActivityFromPopup.value
   })
@@ -81,7 +83,7 @@ const hanleSaveEditForm = (event) => {
 const addNewCard = (event, cardsContainer, addNewCardForm) => {
   event.preventDefault();
   changePopupBtnText(addNewCardPopup, 'Сохранение...');
-  createNewCard({
+  api.createNewCard({
     name: cardName.value,
     link: cardLink.value
   })
@@ -117,7 +119,7 @@ const handleSaveAvatarClick = (e) => {
   changePopupBtnText(editAvatarPopup, 'Сохранение...');
   const avatar = editAvatarPopup.querySelector('.edit-form__input').value;
   const form = editAvatarPopup.querySelector('.edit-form');
-  updateAvatar(avatar)
+  api.updateAvatar(avatar)
     .then((result) => {
       userAvatarWrap.src = result.avatar;
       closePopup(editAvatarPopup);
@@ -134,7 +136,7 @@ const handleSaveAvatarClick = (e) => {
 const handleDeleteCardAccessClick = (e) => {
   e.preventDefault();
   const cardItem = document.getElementById(`${deleteCardId}`);
-  deleteCard(deleteCardId)
+  api.deleteCard(deleteCardId)
     .then((result) => {
       cardItem.remove();
       closePopup(deleteCardPopup)
@@ -146,8 +148,8 @@ const handleDeleteCardAccessClick = (e) => {
 }
 
 Promise.all([
-  getUserInfo(),
-  getInitialCards()
+  api.getUserInfo(),
+  api.getInitialCards()
 ])
   .then((values) => {
     const userInfo = values[0];
