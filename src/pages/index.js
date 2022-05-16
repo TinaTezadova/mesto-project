@@ -1,6 +1,6 @@
 import './index.css';
 import { enableValidation } from '../components/validate';
-import { createCardItem, deleteCardId } from '../components/card';
+import Card from '../components/card';
 import { openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick } from '../components/modal';
 import { resetInputsValue } from '../components/utils';
 import Api from '../components/api';
@@ -31,7 +31,10 @@ const editAvatarPopup = document.querySelector('#editAvatar');
 const editAvatarPopupForm = editAvatarPopup.querySelector('.edit-form');
 const deleteCardPopup = document.querySelector('#deleteCard');
 const deleteCardForm = deleteCardPopup.querySelector('.edit-form');
+const photoViewierCaption = photoViewierPopup.querySelector('.photo-viewier__caption');
+const photoViewierImage = photoViewierPopup.querySelector('.photo-veiwier__image');
 let currentUserId;
+let deleteCardId;
 const api = new Api(config)
 
 const changePopupBtnText = (popup, text) => {
@@ -80,6 +83,39 @@ const hanleSaveEditForm = (event) => {
   saveEditForm(event, params)
 }
 
+const handleCardLikeBtnClick = (cardId, isLiked, setLike) => {
+  if (isLiked) {
+    api.removeLike(cardId)
+      .then((result) => {
+        setLike(result.likes.length)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  else {
+    api.addLike(cardId)
+      .then((result) => {
+        setLike(result.likes.length)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+};
+
+const handleCardItemClick = (link, name) => {
+  photoViewierImage.src = link;
+  photoViewierImage.alt = name;
+  photoViewierCaption.textContent = name;
+  openPopup(photoViewierPopup)
+};
+
+const handleCardDeleteBtnClick = (cardId) => {
+  deleteCardId = cardId;
+  openPopup(deleteCardPopup);
+};
+
 const addNewCard = (event, cardsContainer, addNewCardForm) => {
   event.preventDefault();
   changePopupBtnText(addNewCardPopup, 'Сохранение...');
@@ -88,7 +124,22 @@ const addNewCard = (event, cardsContainer, addNewCardForm) => {
     link: cardLink.value
   })
     .then((result) => {
-      cardsContainer.prepend(createCardItem(result.name, result.link, result.likes.length, result.owner._id, result._id, currentUserId));
+      cardsContainer.prepend(
+        new Card(
+          {name: result.name,
+            link: result.link,
+            likes: result.likes,
+            ownerId: result.owner._id,
+            cardId: result._id,
+            userId: currentUserId
+          },
+          '#card-item-template',
+          handleCardLikeBtnClick,
+          handleCardItemClick,
+          handleCardDeleteBtnClick
+    
+        ).createCard()
+      );
       closePopup(addNewCardPopup);
       resetInputsValue(addNewCardForm);
     })
@@ -147,6 +198,8 @@ const handleDeleteCardAccessClick = (e) => {
 
 }
 
+
+
 Promise.all([
   api.getUserInfo(),
   api.getInitialCards()
@@ -158,7 +211,21 @@ Promise.all([
     userNameWrap.textContent = userInfo.name;
     userFieldOfActivityWrap.textContent = userInfo.about;
     userAvatarWrap.src = userInfo.avatar;
-    cardsInfo.forEach(el => cardsContainer.append(createCardItem(el.name, el.link, el.likes.length, el.owner._id, el._id, currentUserId)));
+    cardsInfo.forEach(el => cardsContainer.append(new Card(
+      {name: el.name,
+        link: el.link,
+        likes: el.likes,
+        ownerId: el.owner._id,
+        cardId: el._id,
+        userId: currentUserId
+      },
+      '#card-item-template',
+      handleCardLikeBtnClick,
+      handleCardItemClick,
+      handleCardDeleteBtnClick
+
+    ).createCard()));
+
   })
   .catch((err) => {
     console.log(err);
