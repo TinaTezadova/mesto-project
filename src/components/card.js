@@ -49,6 +49,66 @@ const handleCardItemClick = (link, name) => {
   openPopup(photoViewierPopup)
 }
 
+class Card {
+constructor(data, selector, setLikeCallback, handlerItemClick){
+this.name = data.name;
+this.link = data.link;
+this.likes = data.likes;
+this.ownerId = data.ownerId;
+this.cardId = data.cardId;
+this.userId = data.userId;
+this._selector = selector;
+this._setLikeCallback =  setLikeCallback;
+this._isLiked = !!likes.find(item => {item._id === this.userId});
+this._handlerItemClick =handlerItemClick
+}
+_getElement() {
+  const cardItem = document.querySelector(this._selector).content.querySelector('.card-item').cloneNode(true);
+  return cardItem
+}
+
+_setEventListeners() {
+  this._likeBtn.addEventListener('click',() => {
+    this._setLikeCallback(this.cardId, this._isLiked, this._setLike)
+  });
+  this._cardItemImg.addEventListener('click',() => {
+    this._handlerItemClick(this.name, this.link)
+  });
+}
+
+_setLike(likes){
+  this._isLiked = !this._isLiked;
+  this._likeCount.textContent = likes
+  this._toggleLikeButton()
+}
+
+_toggleLikeButton() {
+  this._likeBtn.classList.toggle('card-item__button_active');
+}
+
+createCard() {
+  this.card = this._getElement()
+  this._cardItemImg = this.card.querySelector('.card-item__img');
+  const cardName = this.card.querySelector('.card-item__name');
+  this._likeBtn = this.card.querySelector('#card-item__like-button');
+  this._deleteBtn = this.card.querySelector('.card-item__button_type_delete-card');
+  this._likeCount = this.card.querySelector('.card-item__likes-count')
+  if(this._isLiked) {
+    this._toggleLikeButton()
+  }
+  if(this.ownerId){
+    
+  }
+  cardName.textContent = this.name;
+  this.card.id = this.cardId
+  this._cardItemImg.src =this.link;
+  this._cardItemImg.alt = this.name;
+  likeCount.textContent = this.likes.length;
+}
+
+}
+
+
 export function createCardItem(name, link, likes, ownerId, cardId, userId) {
   const cardItem = cartItemTemplate.querySelector('.card-item').cloneNode(true);
   const cardItemImg = cardItem.querySelector('.card-item__img');
