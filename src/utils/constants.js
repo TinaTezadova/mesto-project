@@ -14,3 +14,6 @@ export const formSelectors = {
     inactiveButtonClass: 'edit-form__button_disabled',
     errorFormFieldClass: 'edit-form__input__signature'
   }
+
+export const cardItemSelector = '#card-item-template';
+export const cardsContainerSelector = '.cards-container';

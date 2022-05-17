@@ -1,9 +1,10 @@
 import './index.css';
 import FormValidator from '../components/FormValidator';
 import Card from '../components/Card';
+import Section from '../components/Section';
 import { openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick } from '../components/modal';
 import Api from '../components/Api';
-import { config, formSelectors } from '../utils/constants';
+import { config, formSelectors, cardItemSelector,  cardsContainerSelector} from '../utils/constants';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -13,7 +14,7 @@ const userNameFromProfile = document.querySelector('.profile__name');
 const userFieldOfActivityFromPopup = editProfilePopup.querySelector('#user-field-of-activity');
 const userFieldOfActivityFromProfile = document.querySelector('.profile__field-of-activity');
 const editProfileForm = editProfilePopup.querySelector('.edit-form');
-const cardsContainer = document.querySelector('.cards-container');
+const cardsContainer = document.querySelector('.cards-container'); 
 const addNewCardPopup = document.querySelector('#addCard');
 const addNewCardBtn = document.querySelector('.profile__button_type_add');
 const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
@@ -37,6 +38,8 @@ let deleteCardId;
 const newCardForm = new FormValidator(formSelectors, '#addNewCardForm');
 const updateProfileForm = new FormValidator(formSelectors, '#updateProfileForm');
 const updateAvatarForm = new FormValidator(formSelectors, '#updateAvatarForm');
+
+
 const api = new Api(config)
 
 const changePopupBtnText = (popup, text) => {
@@ -118,6 +121,24 @@ const handleCardDeleteBtnClick = (cardId) => {
   openPopup(deleteCardPopup);
 };
 
+const cardsRenderer = (card) => {
+  return new Card(
+    { name: card.name,
+      link: card.link,
+      likes: card.likes,
+      ownerId: card.owner._id,
+      cardId: card._id,
+      userId: currentUserId
+    },
+    cardItemSelector,
+    handleCardLikeBtnClick,
+    handleCardItemClick,
+    handleCardDeleteBtnClick
+
+  ).createCard()
+}
+const cardsSection = new Section({items: [], renderer: cardsRenderer}, cardsContainerSelector)
+
 const addNewCard = (event, cardsContainer, addNewCardForm) => {
   event.preventDefault();
   changePopupBtnText(addNewCardPopup, 'Сохранение...');
@@ -126,22 +147,7 @@ const addNewCard = (event, cardsContainer, addNewCardForm) => {
     link: cardLink.value
   })
     .then((result) => {
-      cardsContainer.prepend(
-        new Card(
-          {name: result.name,
-            link: result.link,
-            likes: result.likes,
-            ownerId: result.owner._id,
-            cardId: result._id,
-            userId: currentUserId
-          },
-          '#card-item-template',
-          handleCardLikeBtnClick,
-          handleCardItemClick,
-          handleCardDeleteBtnClick
-    
-        ).createCard()
-      );
+      cardsSection.addItem(result);
       closePopup(addNewCardPopup);
       newCardForm.resetForm()
     })
@@ -213,20 +219,7 @@ Promise.all([
     userNameWrap.textContent = userInfo.name;
     userFieldOfActivityWrap.textContent = userInfo.about;
     userAvatarWrap.src = userInfo.avatar;
-    cardsInfo.forEach(el => cardsContainer.append(new Card(
-      {name: el.name,
-        link: el.link,
-        likes: el.likes,
-        ownerId: el.owner._id,
-        cardId: el._id,
-        userId: currentUserId
-      },
-      '#card-item-template',
-      handleCardLikeBtnClick,
-      handleCardItemClick,
-      handleCardDeleteBtnClick
-
-    ).createCard()));
+    cardsSection.setItems(cardsInfo);
 
   })
   .catch((err) => {
@@ -251,6 +244,7 @@ photoViewierCloseBtn.addEventListener('click', handlePhotoViewierCloseBtnClick);
 newCardForm.enableValidation();
 updateProfileForm.enableValidation();
 updateAvatarForm.enableValidation();
+cardsSection.renderItems();
 
 enableClosePopup();
 
