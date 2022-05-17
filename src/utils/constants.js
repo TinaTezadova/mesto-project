@@ -5,3 +5,12 @@ export const config = {
         'Content-Type': 'application/json'
     }
 };
+
+export const formSelectors = { 
+    inputErrorClass: 'edit-form__input_error',
+    inputSelector: '.edit-form__input',
+    errorClass: 'edit-form__input__signature_active',
+    submitButtonSelector: '.edit-form__button',
+    inactiveButtonClass: 'edit-form__button_disabled',
+    errorFormFieldClass: 'edit-form__input__signature'
+  }
