@@ -39,14 +39,22 @@ export default class FormValidator {
   }
   _handelnputValidation(input, formError) {
     return () => {
-      this._checkInputValidity(input, formError)
-      this._toggleFormButton()
+      this._checkInputValidity(input, formError);
+      this._toggleFormButton();
     }
   }
   _setEventListeners(input, formError) {
-    input.addEventListener('input', this._handelnputValidation(input, formError))
+    input.addEventListener('input', this._handelnputValidation(input, formError));
   }
+
+  _setFormEventListeners() {
+    this._form.addEventListener('click', (e) => {
+      e.stopPropagation();
+    })
+  }
+
   enableValidation() {
+    this._setFormEventListeners();
     this._formInputs.forEach(input => {
       const formError = input.nextSibling.nextElementSibling
       this._setEventListeners(input,formError)
@@ -62,59 +70,4 @@ export default class FormValidator {
     })
     this._toggleFormButton()
   }
-}
-
-
-
-
-
-const showError = (input, errorMessage, inputErrorClass, errorClass) => {
-  input.classList.add(inputErrorClass);
-  const formError = input.nextSibling.nextElementSibling
-  formError.textContent = errorMessage;
-  formError.classList.add(errorClass);
-};
-
-const hideError = (input, inputErrorClass, errorClass) => {
-  input.classList.remove(inputErrorClass);
-  const formError = input ? .nextSibling.nextElementSibling
-  formError.classList.remove(errorClass);
-  formError.textContent = '';
-};
-
-const checkFormInputsVlid = (formInputs) => {
-  return formInputs.filter((el) => el.validity.valid === true).length === formInputs.length
-}
-
-const checkInputValidity = (input, formInputs, button, params) => {
-  if (!input.validity.valid) {
-    showError(input, input.validationMessage, params.inputErrorClass, params.errorClass);
-    if (!checkFormInputsVlid(formInputs)) {
-      button.classList.add(params.inactiveButtonClass);
-      button.disabled = true;
-    }
-  } else {
-    hideError(input, params.inputErrorClass, params.errorClass);
-    if (checkFormInputsVlid(formInputs, params.inputErrorClass, params.errorClass)) {
-      button.classList.remove(params.inactiveButtonClass);
-      button.disabled = false;
-    }
-  }
-};
-
-export const enableValidation = (params) => {
-  const forms = document.querySelectorAll(params.formSelector);
-  forms.forEach((form) => {
-    const formInputs = Array.from(form.querySelectorAll(params.inputSelector));
-    const button = form.querySelector(params.submitButtonSelector)
-    formInputs.forEach((input) => {
-      input.addEventListener('input', () => {
-        checkInputValidity(input, formInputs, button, params);
-      });
-    });
-    form.addEventListener('click', (e) => {
-      e.stopPropagation();
-    })
-  });
-
 }

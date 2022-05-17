@@ -1,10 +1,9 @@
 import './index.css';
-import { enableValidation } from '../components/validate';
-import Card from '../components/card';
+import FormValidator from '../components/FormValidator';
+import Card from '../components/Card';
 import { openPopup, closePopup, enableClosePopup, handlePhotoViewierCloseBtnClick } from '../components/modal';
-import { resetInputsValue } from '../components/utils';
-import Api from '../components/api';
-import { config } from '../utils/constants';
+import Api from '../components/Api';
+import { config, formSelectors } from '../utils/constants';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -35,6 +34,9 @@ const photoViewierCaption = photoViewierPopup.querySelector('.photo-viewier__cap
 const photoViewierImage = photoViewierPopup.querySelector('.photo-veiwier__image');
 let currentUserId;
 let deleteCardId;
+const newCardForm = new FormValidator(formSelectors, '#addNewCardForm');
+const updateProfileForm = new FormValidator(formSelectors, '#updateProfileForm');
+const updateAvatarForm = new FormValidator(formSelectors, '#updateAvatarForm');
 const api = new Api(config)
 
 const changePopupBtnText = (popup, text) => {
@@ -141,7 +143,7 @@ const addNewCard = (event, cardsContainer, addNewCardForm) => {
         ).createCard()
       );
       closePopup(addNewCardPopup);
-      resetInputsValue(addNewCardForm);
+      newCardForm.resetForm()
     })
     .finally(() => {
       changePopupBtnText(addNewCardPopup, 'Создать');
@@ -174,7 +176,7 @@ const handleSaveAvatarClick = (e) => {
     .then((result) => {
       userAvatarWrap.src = result.avatar;
       closePopup(editAvatarPopup);
-      resetInputsValue(form);
+      updateAvatarForm.resetForm();
     })
     .finally(() => {
       changePopupBtnText(editAvatarPopup, 'Сохранить');
@@ -246,14 +248,9 @@ closeAddCardBtn.addEventListener('click', handleCloseAddCardBtnClick)
 addNewCardForm.addEventListener('submit', (e) => addNewCard(e, cardsContainer, addNewCardForm));
 
 photoViewierCloseBtn.addEventListener('click', handlePhotoViewierCloseBtnClick);
-enableValidation({
-  formSelector: '.edit-form',
-  inputSelector: '.edit-form__input',
-  submitButtonSelector: '.edit-form__button',
-  inactiveButtonClass: 'edit-form__button_disabled',
-  inputErrorClass: 'edit-form__input_error',
-  errorClass: 'edit-form__input__signature_active'
-});
+newCardForm.enableValidation();
+updateProfileForm.enableValidation();
+updateAvatarForm.enableValidation();
 
 enableClosePopup();
 
