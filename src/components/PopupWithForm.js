@@ -1,4 +1,4 @@
-import Popup from './modal';
+import Popup from './Popup';
 export default class PopupWithForm extends Popup {
   constructor(selectorPopup, submitCallback) {
     super(selectorPopup);
@@ -28,6 +28,7 @@ export default class PopupWithForm extends Popup {
   setEventListeners() {
     super.setEventListeners();
     this._form.addEventListener('submit', (e) => {
+      e.preventDefault();
       this._button.textContent = 'Сохранение...';
       this._submitCallback(e, this._getInputValues());
     });
