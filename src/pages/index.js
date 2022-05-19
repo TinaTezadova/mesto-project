@@ -5,32 +5,23 @@ import Section from '../components/Section';
 import PopupWithForm from '../components/PopupWithForm';
 import PopupWithImage from '../components/PopupWithImage';
 import Api from '../components/Api';
-import { config, formSelectors, cardItemSelector,  cardsContainerSelector} from '../utils/constants';
+import UserInfo from '../components/UserInfo';
+import { config, formSelectors, cardItemSelector, cardsContainerSelector, userInfoSelectors } from '../utils/constants';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
 const closeEditProfileBtn = document.querySelector('.popup__button');
 const userNameFromPopup = editProfilePopup.querySelector('#userName');
-const userNameFromProfile = document.querySelector('.profile__name');
 const userFieldOfActivityFromPopup = editProfilePopup.querySelector('#user-field-of-activity');
-const userFieldOfActivityFromProfile = document.querySelector('.profile__field-of-activity');
 const addNewCardPopup = document.querySelector('#addCard');
 const addNewCardBtn = document.querySelector('.profile__button_type_add');
 const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
-const photoViewierPopup = document.querySelector('#photo-viewier');
-const userNameWrap = document.querySelector('.profile__name');
-const userFieldOfActivityWrap = document.querySelector('.profile__field-of-activity');
-const userAvatarWrap = document.querySelector('.profile__avatar');
 const userAvatar = document.querySelector('.profile__avatar-wrapper');
-let currentUserId;
 let deleteCardId;
 const newCardForm = new FormValidator(formSelectors, '#addNewCardForm');
 const updateProfileForm = new FormValidator(formSelectors, '#updateProfileForm');
 const updateAvatarForm = new FormValidator(formSelectors, '#updateAvatarForm');
-
-
-
-
+const userInfo = new UserInfo(userInfoSelectors);
 const api = new Api(config)
 
 const addNewCard = (event, values) => {
@@ -60,8 +51,7 @@ function saveEditForm(event, values) {
     about,
   })
     .then((result) => {
-      userNameFromProfile.textContent = result.name;
-      userFieldOfActivityFromProfile.textContent = result.about;
+      userInfo.setUserInfo(result);
       updateProfilePopup.closePopup();
     })
     .catch((err) => {
@@ -72,8 +62,8 @@ function saveEditForm(event, values) {
 const handleSaveAvatarClick = (e, newAvatarSrc) => {
   e.preventDefault();
   api.updateAvatar(newAvatarSrc[0])
-    .then((result) => {
-      userAvatarWrap.src = result.avatar;
+    .then(({ avatar }) => {
+      userInfo.setAvatar(avatar);
       updateAvatarPopup.closePopup();
     })
     .catch((err) => {
@@ -99,9 +89,13 @@ const handleCloseEditProfileBtnClick = () => {
   updateProfilePopup.closePopup()
 };
 
+const setEditProfileForm = ({ name, about }) => {
+  userNameFromPopup.value = name;
+  userFieldOfActivityFromPopup.value = about;
+}
+
 const handleEditProfileBtnClick = () => {
-  userNameFromPopup.value = userNameFromProfile.textContent;
-  userFieldOfActivityFromPopup.value = userFieldOfActivityFromProfile.textContent;
+  setEditProfileForm(userInfo.getUserInfo());
   updateProfilePopup.openPopup();
 };
 
@@ -144,12 +138,13 @@ const confirmDeletePopup = new PopupWithForm('#deleteCard', handleDeleteCardAcce
 
 const cardsRenderer = (card) => {
   return new Card(
-    { name: card.name,
+    {
+      name: card.name,
       link: card.link,
       likes: card.likes,
       ownerId: card.owner._id,
       cardId: card._id,
-      userId: currentUserId
+      userId: userInfo.getUserId(),
     },
     cardItemSelector,
     handleCardLikeBtnClick,
@@ -158,7 +153,7 @@ const cardsRenderer = (card) => {
 
   ).createCard()
 }
-const cardsSection = new Section({items: [], renderer: cardsRenderer}, cardsContainerSelector)
+const cardsSection = new Section({ items: [], renderer: cardsRenderer }, cardsContainerSelector)
 
 
 
@@ -173,25 +168,16 @@ const handleCloseAddCardBtnClick = () => {
 
 const handleEditAvatarClick = () => {
   updateAvatarPopup.openPopup()
-}
-
-
-
-
-
-
+};
 
 Promise.all([
   api.getUserInfo(),
   api.getInitialCards()
 ])
   .then((values) => {
-    const userInfo = values[0];
+    const userData = values[0];
     const cardsInfo = values[1];
-    currentUserId = userInfo._id;
-    userNameWrap.textContent = userInfo.name;
-    userFieldOfActivityWrap.textContent = userInfo.about;
-    userAvatarWrap.src = userInfo.avatar;
+    userInfo.setUserInfo(userData);
     cardsSection.setItems(cardsInfo);
 
   })
@@ -207,18 +193,14 @@ closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
 
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
-closeAddCardBtn.addEventListener('click', handleCloseAddCardBtnClick)
+closeAddCardBtn.addEventListener('click', handleCloseAddCardBtnClick);
 
+userAvatar.addEventListener('click', handleEditAvatarClick);
 
 newCardForm.enableValidation();
 updateProfileForm.enableValidation();
 updateAvatarForm.enableValidation();
 cardsSection.renderItems();
-
-
-userAvatar.addEventListener('click', handleEditAvatarClick);
-photoViewierPopup.querySelector('.photo-viewier').addEventListener('click', (e) => e.stopPropagation());
-
 
 photoViewierModal.setEventListeners();
 addCardPopup.setEventListeners();
