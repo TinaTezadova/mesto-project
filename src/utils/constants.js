@@ -17,3 +17,9 @@ export const formSelectors = {
 
 export const cardItemSelector = '#card-item-template';
 export const cardsContainerSelector = '.cards-container';
+
+export const userInfoSelectors = {
+    nameSelector: '.profile__name',
+    aboutSelector: '.profile__field-of-activity',
+    avatarSelector: '.profile__avatar'
+}

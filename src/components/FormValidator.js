@@ -56,14 +56,14 @@ export default class FormValidator {
   enableValidation() {
     this._setFormEventListeners();
     this._formInputs.forEach(input => {
-      const formError = input.nextSibling.nextElementSibling
-      this._setEventListeners(input, formError)
+      const formError = input.nextSibling.nextElementSibling;
+      this._setEventListeners(input, formError);
     })
   }
   resetForm() {
     this._form.reset()
     this._formInputs.forEach(input => {
-      input.classList.remove(this._inputErrorClass)
+      input.classList.remove(this._inputErrorClass);
     })
     this._errorFormFields.forEach(item => {
       item.textContent = '';

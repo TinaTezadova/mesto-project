@@ -13,19 +13,19 @@ export default class Popup {
     }
     _handleEscClose(e) {
         if (e.key === 'Escape') {
-            this.closePopup()
+            this.closePopup();
         }
     }
     handleOverlayClick(e) {
         if(e.target.classList.contains('popup_open')) {
-            this.closePopup()
+            this.closePopup();
         }
     }
     setEventListeners() {
         const button = this._popup.querySelector('.popup__button');
         button.addEventListener('click', () => {
-            this.closePopup()
+            this.closePopup();
         })
-        this._popup.addEventListener('click', this.handleOverlayClick.bind(this))
+        this._popup.addEventListener('click', this.handleOverlayClick.bind(this));
     }
 }
