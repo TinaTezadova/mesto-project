@@ -22,7 +22,7 @@ const newCardForm = new FormValidator(formSelectors, '#addNewCardForm');
 const updateProfileForm = new FormValidator(formSelectors, '#updateProfileForm');
 const updateAvatarForm = new FormValidator(formSelectors, '#updateAvatarForm');
 const userInfo = new UserInfo(userInfoSelectors);
-const api = new Api(config)
+const api = new Api(config);
 
 const addNewCard = (event, values) => {
   const name = values[0];
