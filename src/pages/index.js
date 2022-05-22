@@ -6,16 +6,16 @@ import PopupWithForm from '../components/PopupWithForm';
 import PopupWithImage from '../components/PopupWithImage';
 import Api from '../components/Api';
 import UserInfo from '../components/UserInfo';
-import { config, formSelectors, cardItemSelector, cardsContainerSelector, userInfoSelectors } from '../utils/constants';
+import {
+  config,
+  formSelectors,
+  cardItemSelector,
+  cardsContainerSelector,
+  userInfoSelectors
+} from '../utils/constants';
 
-const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
-const closeEditProfileBtn = document.querySelector('.popup__button');
-const userNameFromPopup = editProfilePopup.querySelector('#userName');
-const userFieldOfActivityFromPopup = editProfilePopup.querySelector('#user-field-of-activity');
-const addNewCardPopup = document.querySelector('#addCard');
 const addNewCardBtn = document.querySelector('.profile__button_type_add');
-const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
 const userAvatar = document.querySelector('.profile__avatar-wrapper');
 let deleteCardId;
 const newCardForm = new FormValidator(formSelectors, '#addNewCardForm');
@@ -25,13 +25,13 @@ const userInfo = new UserInfo(userInfoSelectors);
 const api = new Api(config);
 
 const addNewCard = (event, values) => {
-  const name = values[0];
-  const link = values[1];
+  const name = values.cardName;
+  const link = values.cardLink;
   event.preventDefault();
   api.createNewCard({
-    name,
-    link,
-  })
+      name,
+      link,
+    })
     .then((result) => {
       cardsSection.addItem(result);
       addCardPopup.closePopup();
@@ -43,13 +43,13 @@ const addNewCard = (event, values) => {
 };
 
 function saveEditForm(event, values) {
-  const name = values[0];
-  const about = values[1];
+  const name = values.userName;
+  const about = values.userFieldOfActivity;
   event.preventDefault();
   api.updateUserInfo({
-    name,
-    about,
-  })
+      name,
+      about,
+    })
     .then((result) => {
       userInfo.setUserInfo(result);
       updateProfilePopup.closePopup();
@@ -61,8 +61,10 @@ function saveEditForm(event, values) {
 
 const handleSaveAvatarClick = (e, newAvatarSrc) => {
   e.preventDefault();
-  api.updateAvatar(newAvatarSrc[0])
-    .then(({ avatar }) => {
+  api.updateAvatar(newAvatarSrc.avatarLink)
+    .then(({
+      avatar
+    }) => {
       userInfo.setAvatar(avatar);
       updateAvatarPopup.closePopup();
     })
@@ -89,9 +91,14 @@ const handleCloseEditProfileBtnClick = () => {
   updateProfilePopup.closePopup()
 };
 
-const setEditProfileForm = ({ name, about }) => {
-  userNameFromPopup.value = name;
-  userFieldOfActivityFromPopup.value = about;
+const setEditProfileForm = ({
+  name,
+  about
+}) => {
+  updateProfilePopup.setInputValues({
+    userName: name,
+    userFieldOfActivity: about
+  })
 }
 
 const handleEditProfileBtnClick = () => {
@@ -109,8 +116,7 @@ const handleCardLikeBtnClick = (cardId, isLiked, setLike) => {
       .catch((err) => {
         console.log(err);
       });
-  }
-  else {
+  } else {
     api.addLike(cardId)
       .then((result) => {
         setLike(result.likes.length)
@@ -137,8 +143,7 @@ const photoViewierModal = new PopupWithImage('#photo-viewier');
 const confirmDeletePopup = new PopupWithForm('#deleteCard', handleDeleteCardAccessClick);
 
 const cardsRenderer = (card) => {
-  return new Card(
-    {
+  return new Card({
       name: card.name,
       link: card.link,
       likes: card.likes,
@@ -153,12 +158,15 @@ const cardsRenderer = (card) => {
 
   ).createCard()
 }
-const cardsSection = new Section({ items: [], renderer: cardsRenderer }, cardsContainerSelector)
+const cardsSection = new Section({
+  items: [],
+  renderer: cardsRenderer
+}, cardsContainerSelector)
 
 
 
 const handleAddNewCardBtnClick = () => {
-  addNewCardPopup.querySelector('.edit-form__button').classList.add('edit-form__button_disabled')
+  newCardForm.resetValidation()
   addCardPopup.openPopup()
 };
 
@@ -167,19 +175,20 @@ const handleCloseAddCardBtnClick = () => {
 };
 
 const handleEditAvatarClick = () => {
+  updateAvatarForm.resetValidation()
   updateAvatarPopup.openPopup()
 };
 
 Promise.all([
-  api.getUserInfo(),
-  api.getInitialCards()
-])
+    api.getUserInfo(),
+    api.getInitialCards()
+  ])
   .then((values) => {
     const userData = values[0];
     const cardsInfo = values[1];
     userInfo.setUserInfo(userData);
     cardsSection.setItems(cardsInfo);
-
+    cardsSection.renderItems();
   })
   .catch((err) => {
     console.log(err);
@@ -189,23 +198,18 @@ Promise.all([
 
 editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
 
-closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
 
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
-closeAddCardBtn.addEventListener('click', handleCloseAddCardBtnClick);
 
 userAvatar.addEventListener('click', handleEditAvatarClick);
 
 newCardForm.enableValidation();
 updateProfileForm.enableValidation();
 updateAvatarForm.enableValidation();
-cardsSection.renderItems();
 
 photoViewierModal.setEventListeners();
 addCardPopup.setEventListeners();
 updateProfilePopup.setEventListeners();
 updateAvatarPopup.setEventListeners();
 confirmDeletePopup.setEventListeners();
-
-
