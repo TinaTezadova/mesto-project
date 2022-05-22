@@ -11,8 +11,6 @@ import { config, formSelectors, cardItemSelector, cardsContainerSelector, userIn
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
 const closeEditProfileBtn = document.querySelector('.popup__button');
-const userNameFromPopup = editProfilePopup.querySelector('#userName');
-const userFieldOfActivityFromPopup = editProfilePopup.querySelector('#user-field-of-activity');
 const addNewCardPopup = document.querySelector('#addCard');
 const addNewCardBtn = document.querySelector('.profile__button_type_add');
 const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
@@ -25,8 +23,8 @@ const userInfo = new UserInfo(userInfoSelectors);
 const api = new Api(config);
 
 const addNewCard = (event, values) => {
-  const name = values[0];
-  const link = values[1];
+  const name = values.cardName;
+  const link = values.cardLink;
   event.preventDefault();
   api.createNewCard({
     name,
@@ -43,8 +41,8 @@ const addNewCard = (event, values) => {
 };
 
 function saveEditForm(event, values) {
-  const name = values[0];
-  const about = values[1];
+  const name = values.userName;
+  const about = values.userFieldOfActivity;
   event.preventDefault();
   api.updateUserInfo({
     name,
@@ -61,7 +59,7 @@ function saveEditForm(event, values) {
 
 const handleSaveAvatarClick = (e, newAvatarSrc) => {
   e.preventDefault();
-  api.updateAvatar(newAvatarSrc[0])
+  api.updateAvatar(newAvatarSrc.avatarLink)
     .then(({ avatar }) => {
       userInfo.setAvatar(avatar);
       updateAvatarPopup.closePopup();
@@ -90,8 +88,10 @@ const handleCloseEditProfileBtnClick = () => {
 };
 
 const setEditProfileForm = ({ name, about }) => {
-  userNameFromPopup.value = name;
-  userFieldOfActivityFromPopup.value = about;
+  updateProfilePopup.setInputValues({
+    userName: name,
+    userFieldOfActivity: about
+  })
 }
 
 const handleEditProfileBtnClick = () => {
