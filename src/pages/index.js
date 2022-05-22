@@ -14,12 +14,8 @@ import {
   userInfoSelectors
 } from '../utils/constants';
 
-const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
-const closeEditProfileBtn = document.querySelector('.popup__button');
-const addNewCardPopup = document.querySelector('#addCard');
 const addNewCardBtn = document.querySelector('.profile__button_type_add');
-const closeAddCardBtn = addNewCardPopup.querySelector('#addCardPopupBtn');
 const userAvatar = document.querySelector('.profile__avatar-wrapper');
 let deleteCardId;
 const newCardForm = new FormValidator(formSelectors, '#addNewCardForm');
