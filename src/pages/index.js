@@ -87,10 +87,6 @@ const handleDeleteCardAccessClick = (e) => {
 
 }
 
-const handleCloseEditProfileBtnClick = () => {
-  updateProfilePopup.closePopup()
-};
-
 const setEditProfileForm = ({
   name,
   about
@@ -170,10 +166,6 @@ const handleAddNewCardBtnClick = () => {
   addCardPopup.openPopup()
 };
 
-const handleCloseAddCardBtnClick = () => {
-  addCardPopup.closePopup()
-};
-
 const handleEditAvatarClick = () => {
   updateAvatarForm.resetValidation()
   updateAvatarPopup.openPopup()
@@ -197,11 +189,7 @@ Promise.all([
 
 
 editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
-
-
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
-
-
 userAvatar.addEventListener('click', handleEditAvatarClick);
 
 newCardForm.enableValidation();
