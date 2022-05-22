@@ -60,7 +60,7 @@ export default class FormValidator {
       this._setEventListeners(input, formError);
     })
   }
-  
+
   resetValidation() {
     this._form.reset()
     this._formInputs.forEach(input => {
@@ -70,5 +70,6 @@ export default class FormValidator {
       item.textContent = '';
     })
     this._toggleFormButton();
+    this._formButton.classList.add('edit-form__button_disabled')
   }
 }

@@ -6,7 +6,13 @@ import PopupWithForm from '../components/PopupWithForm';
 import PopupWithImage from '../components/PopupWithImage';
 import Api from '../components/Api';
 import UserInfo from '../components/UserInfo';
-import { config, formSelectors, cardItemSelector, cardsContainerSelector, userInfoSelectors } from '../utils/constants';
+import {
+  config,
+  formSelectors,
+  cardItemSelector,
+  cardsContainerSelector,
+  userInfoSelectors
+} from '../utils/constants';
 
 const editProfilePopup = document.querySelector('#editProfile');
 const editProfileBtn = document.querySelector('.profile__button_type_edit-profile');
@@ -27,9 +33,9 @@ const addNewCard = (event, values) => {
   const link = values.cardLink;
   event.preventDefault();
   api.createNewCard({
-    name,
-    link,
-  })
+      name,
+      link,
+    })
     .then((result) => {
       cardsSection.addItem(result);
       addCardPopup.closePopup();
@@ -45,9 +51,9 @@ function saveEditForm(event, values) {
   const about = values.userFieldOfActivity;
   event.preventDefault();
   api.updateUserInfo({
-    name,
-    about,
-  })
+      name,
+      about,
+    })
     .then((result) => {
       userInfo.setUserInfo(result);
       updateProfilePopup.closePopup();
@@ -60,7 +66,9 @@ function saveEditForm(event, values) {
 const handleSaveAvatarClick = (e, newAvatarSrc) => {
   e.preventDefault();
   api.updateAvatar(newAvatarSrc.avatarLink)
-    .then(({ avatar }) => {
+    .then(({
+      avatar
+    }) => {
       userInfo.setAvatar(avatar);
       updateAvatarPopup.closePopup();
     })
@@ -87,7 +95,10 @@ const handleCloseEditProfileBtnClick = () => {
   updateProfilePopup.closePopup()
 };
 
-const setEditProfileForm = ({ name, about }) => {
+const setEditProfileForm = ({
+  name,
+  about
+}) => {
   updateProfilePopup.setInputValues({
     userName: name,
     userFieldOfActivity: about
@@ -109,8 +120,7 @@ const handleCardLikeBtnClick = (cardId, isLiked, setLike) => {
       .catch((err) => {
         console.log(err);
       });
-  }
-  else {
+  } else {
     api.addLike(cardId)
       .then((result) => {
         setLike(result.likes.length)
@@ -137,8 +147,7 @@ const photoViewierModal = new PopupWithImage('#photo-viewier');
 const confirmDeletePopup = new PopupWithForm('#deleteCard', handleDeleteCardAccessClick);
 
 const cardsRenderer = (card) => {
-  return new Card(
-    {
+  return new Card({
       name: card.name,
       link: card.link,
       likes: card.likes,
@@ -153,12 +162,15 @@ const cardsRenderer = (card) => {
 
   ).createCard()
 }
-const cardsSection = new Section({ items: [], renderer: cardsRenderer }, cardsContainerSelector)
+const cardsSection = new Section({
+  items: [],
+  renderer: cardsRenderer
+}, cardsContainerSelector)
 
 
 
 const handleAddNewCardBtnClick = () => {
-  addNewCardPopup.querySelector('.edit-form__button').classList.add('edit-form__button_disabled')
+  newCardForm.resetValidation()
   addCardPopup.openPopup()
 };
 
@@ -167,19 +179,20 @@ const handleCloseAddCardBtnClick = () => {
 };
 
 const handleEditAvatarClick = () => {
+  updateAvatarForm.resetValidation()
   updateAvatarPopup.openPopup()
 };
 
 Promise.all([
-  api.getUserInfo(),
-  api.getInitialCards()
-])
+    api.getUserInfo(),
+    api.getInitialCards()
+  ])
   .then((values) => {
     const userData = values[0];
     const cardsInfo = values[1];
     userInfo.setUserInfo(userData);
     cardsSection.setItems(cardsInfo);
-
+    cardsSection.renderItems();
   })
   .catch((err) => {
     console.log(err);
@@ -189,23 +202,18 @@ Promise.all([
 
 editProfileBtn.addEventListener('click', handleEditProfileBtnClick);
 
-closeEditProfileBtn.addEventListener('click', handleCloseEditProfileBtnClick);
 
 addNewCardBtn.addEventListener('click', handleAddNewCardBtnClick);
 
-closeAddCardBtn.addEventListener('click', handleCloseAddCardBtnClick);
 
 userAvatar.addEventListener('click', handleEditAvatarClick);
 
 newCardForm.enableValidation();
 updateProfileForm.enableValidation();
 updateAvatarForm.enableValidation();
-cardsSection.renderItems();
 
 photoViewierModal.setEventListeners();
 addCardPopup.setEventListeners();
 updateProfilePopup.setEventListeners();
 updateAvatarPopup.setEventListeners();
 confirmDeletePopup.setEventListeners();
-
-
