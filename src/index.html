@@ -51,16 +51,16 @@
     <div class="popup" id='editProfile'>
         <div class="popup__data">
             <button class="popup__button" type="button"></button>
-            <form class="edit-form" name="edit-form">
+            <form class="edit-form" name="edit-form" id='updateProfileForm'>
                 <h2 class="edit-form__header">Редактировать профиль</h2>
                 <label for="userName" class="edit-form__label">
-                    <input class="edit-form__input" type="text" value="" name="user-name"
+                    <input class="edit-form__input" type="text" value="" name="userName"
                         id='userName' placeholder="Имя" minlength="2" maxlength="40" required>
                     <span class="edit-form__input__signature"></span>
                 </label>
                 <label for="user-field-of-activity" class="edit-form__label edit-form__label_type_field-of-activity">
                     <input class="edit-form__input edit-form__input_type_field-of-activity" type="text" value=""
-                        name="user-field-of-activity" id="user-field-of-activity" placeholder="О себе" minlength="2" maxlength="200" required>
+                        name="userFieldOfActivity" id="user-field-of-activity" placeholder="О себе" minlength="2" maxlength="200" required>
                     <span class="edit-form__input__signature"></span>
                 </label>
 
@@ -73,16 +73,16 @@
     <div class="popup" id='addCard'>
         <div class="popup__data">
             <button class="popup__button" type="button" id='addCardPopupBtn'></button>
-            <form class="edit-form" name="edit-form">
+            <form class="edit-form" name="edit-form" id='addNewCardForm'>
                 <h2 class="edit-form__header">Новое место</h2>
                 <label for="card-name" class="edit-form__label">
-                    <input class="edit-form__input" type="text" value="" name="card-name" id='card-name'
+                    <input class="edit-form__input" type="text" value="" name="cardName" id='card-name'
                     placeholder="Название" minlength="2" maxlength="30" required>
                     <span class="edit-form__input__signature"></span>
                 </label>
                 <label for="card-name" class="edit-form__label edit-form__label_type_field-of-activity">
                     <input class="edit-form__input edit-form__input_type_field-of-activity" type="url" value=""
-                    name="card-link" id="card-link" placeholder="Ссылка на картинку" required>
+                    name="cardLink" id="card-link" placeholder="Ссылка на картинку" required>
                     <span class="edit-form__input__signature"></span>
                 </label>
                 <button class="edit-form__button edit-form__button_disabled" type="submit" disabled>Создать</button>
@@ -104,11 +104,11 @@
     <div class="popup" id='editAvatar'>
         <div class="popup__data">
             <button class="popup__button" type="button" id='editAvatarPopupBtn'></button>
-            <form class="edit-form" name="edit-form">
+            <form class="edit-form" name="edit-form" id='updateAvatarForm'>
                 <h2 class="edit-form__header">Обновить аватар</h2>
-                <label for="card-name" class="edit-form__label edit-form__label_type_field-of-activity">
+                <label for="avatar-link" class="edit-form__label edit-form__label_type_field-of-activity">
                     <input class="edit-form__input edit-form__input_type_field-of-activity" type="url" value=""
-                    name="card-link" id="card-link" placeholder="Ссылка на новый аватар" required>
+                    name="avatarLink" id="avatar-link" placeholder="Ссылка на новый аватар" required>
                     <span class="edit-form__input__signature"></span>
                 </label>
                 <button class="edit-form__button edit-form__button_disabled" type="submit" disabled>Сохранить</button>
